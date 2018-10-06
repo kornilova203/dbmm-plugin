@@ -1,0 +1,40 @@
+{
+  parserClass="com.github.korniloval.dbmm.DbmmGeneratedParser"
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  psiClassPrefix="Dbmm"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.github.korniloval.dbmm.psi"
+  psiImplPackage="com.github.korniloval.dbmm.psi.impl"
+
+  elementTypeHolderClass="com.github.korniloval.dbmm.psi.DbmmTypes"
+  elementTypeClass="com.github.korniloval.dbmm.psi.DbmmElementType"
+  tokenTypeClass="com.github.korniloval.dbmm.psi.DbmmTokenType"
+
+  tokens=[
+    WHITE_SPACE='regexp:\s+'
+    COLON=':'
+    COMMA=','
+    DOT='.'
+    RBRACKET='['
+    LBRACKET=']'
+  ]
+}
+
+root ::= ( COMMENT | element_definition )*
+
+element_definition ::= element_name ':' ( ABSTRACT? options? ) interface_or_kind_list
+  field_definition* { pin=3 }
+element_name ::= IDENTIFIER
+private options ::= '[' element_option* ']' { pin=1 }
+element_option ::= OPTION { recoverWhile=not_option_or_rbracket }
+private not_option_or_rbracket ::= !( OPTION | ']' )
+private interface_or_kind_list ::= interface_or_kind (',' interface_or_kind)* { pin=1 }
+interface_or_kind ::= IDENTIFIER { recoverWhile=not_identifier_or_comma }
+private not_identifier_or_comma ::= !( ',' | IDENTIFIER )
+
+field_definition ::= field_name ':' ( family_type | property_type | const_type | parent_entity )
+field_name ::= IDENTIFIER
+family_type ::= FAMILY [OF IDENTIFIER] { pin=1 }
+property_type ::= EXTERNAL? PROPERTY [ ( LIST | SET ) OF] IDENTIFIER ('.' IDENTIFIER)* { pin="PROPERTY" }
+const_type ::= CONST JAVA_CODE { pin=1 }
+parent_entity ::= PARENT ENTITY [ IDENTIFIER !':' ] { pin=1 }
