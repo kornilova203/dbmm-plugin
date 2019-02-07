@@ -30,11 +30,13 @@ import static com.github.korniloval.dbmm.psi.DbmmTypes.*;
 WHITE_SPACE=\s+
 
 WHITE_SPACE=[ \t\n\x0B\f\r]+
+WHITE_SPACE_NO_LINE_BREAK=[ \t\x0B\f\r]+
 COMMENT=(#|--)[^\n]*
 OPTION=[1nip]
 IDENTIFIER=[_a-zA-Z0-9]+
 
 %state OPTIONS_STATE
+%state LOOKING_FOR_JAVA_CODE_STATE
 %state JAVA_CODE_STATE
 
 %%
@@ -50,7 +52,8 @@ IDENTIFIER=[_a-zA-Z0-9]+
   "parent"           { return PARENT; }
   "entity"           { return ENTITY; }
   "external"         { return EXTERNAL; }
-  "const"            { yybegin(JAVA_CODE_STATE); return CONST; }
+  "const"            { yybegin(LOOKING_FOR_JAVA_CODE_STATE); return CONST; }
+  "default"          { yybegin(LOOKING_FOR_JAVA_CODE_STATE); return DEFAULT; }
   ":"                { return COLON; }
   ","                { return COMMA; }
   "."                { return DOT; }
@@ -68,6 +71,12 @@ IDENTIFIER=[_a-zA-Z0-9]+
   {OPTION}                    { return OPTION; }
   "]"                         { yybegin(YYINITIAL); return LBRACKET; }
   .                           { return BAD_CHARACTER; }
+}
+
+<LOOKING_FOR_JAVA_CODE_STATE> {
+  {WHITE_SPACE_NO_LINE_BREAK} / \n { yybegin(YYINITIAL); return WHITE_SPACE; }
+  {WHITE_SPACE_NO_LINE_BREAK} { yybegin(JAVA_CODE_STATE); return WHITE_SPACE; }
+  <<EOF>>                     { yybegin(YYINITIAL); }
 }
 
 <JAVA_CODE_STATE> {

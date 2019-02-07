@@ -36,7 +36,7 @@ class DbmmSyntaxHighlighter : SyntaxHighlighterBase() {
             DbmmTypes.IDENTIFIER -> ID_KEYS
 
             PROPERTY, OF, FAMILY, LIST, SET, ABSTRACT,
-            CONST, PARENT, ENTITY, EXTERNAL -> KEYWORD_KEYS
+            CONST, PARENT, ENTITY, EXTERNAL, DEFAULT -> KEYWORD_KEYS
 
             TokenType.BAD_CHARACTER -> BAD_CHAR_KEYS
 

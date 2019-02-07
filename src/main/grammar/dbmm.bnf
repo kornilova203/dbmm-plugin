@@ -23,7 +23,7 @@
 root ::= ( COMMENT | element_definition )*
 
 element_definition ::= element_name ':' ( ABSTRACT? options? ) interface_or_kind_list
-  field_definition* { pin=3 }
+  field_definition* { pin=2 }
 element_name ::= IDENTIFIER
 private options ::= '[' element_option* ']' { pin=1 }
 element_option ::= OPTION { recoverWhile=not_option_or_rbracket }
@@ -34,7 +34,16 @@ private not_identifier_or_comma ::= !( ',' | IDENTIFIER )
 
 field_definition ::= field_name ':' ( family_type | property_type | const_type | parent_entity )
 field_name ::= IDENTIFIER
-family_type ::= FAMILY [OF IDENTIFIER] { pin=1 }
-property_type ::= EXTERNAL? PROPERTY [ ( LIST | SET ) OF] IDENTIFIER ('.' IDENTIFIER)* { pin="PROPERTY" }
-const_type ::= CONST JAVA_CODE { pin=1 }
+family_type ::= FAMILY [OF IDENTIFIER]
+property_type ::= EXTERNAL? PROPERTY
+ ( collection_type
+ | class_ref
+ )
+ default_type?
+ { pin="PROPERTY" }
+const_type ::= CONST java_code { pin=1 }
+default_type ::= DEFAULT java_code { pin=1 }
+private java_code ::= JAVA_CODE { name="value" }
+collection_type ::= ( LIST | SET ) OF class_ref { pin=1 }
+class_ref ::= IDENTIFIER ('.' IDENTIFIER)*
 parent_entity ::= PARENT ENTITY [ IDENTIFIER !':' ] { pin=1 }
