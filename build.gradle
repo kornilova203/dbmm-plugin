@@ -3,11 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.70'
     id 'java'
     id 'idea'
-    id 'org.jetbrains.grammarkit' version '2018.1.7'
 }
 
 group 'com.github.korniloval'
-version '1.0'
+version '2.0'
 
 sourceCompatibility = 1.8
 
@@ -16,10 +15,9 @@ repositories {
 }
 
 intellij {
-    version = '2018.2.3'
+    version = '2018.3.4'
     updateSinceUntilBuild = false
     downloadSources = true
-    plugins = ['PsiViewer:182.2757.2']
 }
 
 dependencies {
@@ -41,23 +39,3 @@ idea {
         generatedSourceDirs += file('src/main/gen')
     }
 }
-
-import org.jetbrains.grammarkit.tasks.*
-
-task generateLexer(type: GenerateLexer) {
-    source = 'src/main/grammar/DbmmLexer.flex'
-    targetDir = 'src/main/gen/com/github/korniloval/dbmm/lexer'
-    targetClass = 'DbmmLexer'
-    purgeOldFiles = true
-}
-
-task generateParser(type: GenerateParser) {
-    source = "src/main/grammar/dbmm.bnf"
-    targetRoot = "src/main/gen/"
-    pathToParser = "/com/github/korniloval/dbmm/DbmmGeneratedParser.java"
-    pathToPsiRoot = "/com/github/korniloval/dbmm/psi"
-    purgeOldFiles = true
-}
-
-generateParser.dependsOn generateLexer
-compileKotlin.dependsOn generateParser

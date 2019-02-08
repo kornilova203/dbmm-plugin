@@ -1,9 +1,6 @@
 package com.github.korniloval.dbmm.highlight
 
-import com.github.korniloval.dbmm.psi.DbmmElementName
-import com.github.korniloval.dbmm.psi.DbmmFieldName
-import com.github.korniloval.dbmm.psi.DbmmInterfaceOrKind
-import com.github.korniloval.dbmm.psi.DbmmTypes
+import com.github.korniloval.dbmm.psi.*
 import com.intellij.lang.ASTNode
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
@@ -18,14 +15,13 @@ class DbmmAnnotator : Annotator {
     private val kindPattern = Pattern.compile("[_A-Z]+")
 
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
-        if (element !is ASTNode) return
-        if (element.elementType == DbmmTypes.IDENTIFIER) {
-            val annotation = holder.createInfoAnnotation(element as PsiElement, null)
+        if (element.node.elementType == DbmmTypes.IDENTIFIER) {
+            val annotation = holder.createInfoAnnotation(element, null)
             when (element.parent) {
-                is DbmmElementName -> annotation.textAttributes = INTERFACE_NAME
-                is DbmmFieldName -> annotation.textAttributes = INSTANCE_FIELD
+                is DbmmElementDefinition -> annotation.textAttributes = INTERFACE_NAME
+                is DbmmElementRef -> annotation.textAttributes = INSTANCE_FIELD
                 is DbmmInterfaceOrKind ->
-                    if (kindPattern.matcher((element as PsiElement).text).matches())
+                    if (kindPattern.matcher(element.text).matches())
                         annotation.textAttributes = STATIC_FIELD
             }
         }

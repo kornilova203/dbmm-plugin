@@ -38,8 +38,7 @@ class DbmmParserDefinition : ParserDefinition {
 
     override fun createLexer(project: Project?): Lexer = DbmmLexer.getAdapter()
 
-    override fun createElement(node: ASTNode?): PsiElement =
-        DbmmTypes.Factory.createElement(node)
+    override fun createElement(node: ASTNode?): PsiElement = throw AssertionError()
 
     override fun getCommentTokens(): TokenSet = COMMENTS
 }

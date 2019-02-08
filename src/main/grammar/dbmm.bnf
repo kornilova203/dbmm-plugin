@@ -1,6 +1,6 @@
 {
   parserClass="com.github.korniloval.dbmm.DbmmGeneratedParser"
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  extends="com.github.korniloval.dbmm.psi.DbmmCompositePsiElement"
   psiClassPrefix="Dbmm"
   psiImplClassSuffix="Impl"
   psiPackage="com.github.korniloval.dbmm.psi"
@@ -9,6 +9,9 @@
   elementTypeHolderClass="com.github.korniloval.dbmm.psi.DbmmTypes"
   elementTypeClass="com.github.korniloval.dbmm.psi.DbmmElementType"
   tokenTypeClass="com.github.korniloval.dbmm.psi.DbmmTokenType"
+
+  mixin("element_definition")="com.github.korniloval.dbmm.psi.DbmmElementDefinitionMixin"
+  mixin("element_ref")="com.github.korniloval.dbmm.psi.DbmmElementRefMixin"
 
   tokens=[
     WHITE_SPACE='regexp:\s+'
@@ -22,9 +25,8 @@
 
 root ::= ( COMMENT | element_definition )*
 
-element_definition ::= element_name ':' ( ABSTRACT? options? ) interface_or_kind_list
+element_definition ::= IDENTIFIER ':' ( ABSTRACT? options? ) interface_or_kind_list
   field_definition* { pin=2 }
-element_name ::= IDENTIFIER
 private options ::= '[' element_option* ']' { pin=1 }
 element_option ::= OPTION { recoverWhile=not_option_or_rbracket }
 private not_option_or_rbracket ::= !( OPTION | ']' )
@@ -32,9 +34,9 @@ private interface_or_kind_list ::= interface_or_kind (',' interface_or_kind)* { 
 interface_or_kind ::= IDENTIFIER { recoverWhile=not_identifier_or_comma }
 private not_identifier_or_comma ::= !( ',' | IDENTIFIER )
 
-field_definition ::= field_name ':' ( family_type | property_type | const_type | parent_entity )
-field_name ::= IDENTIFIER
-family_type ::= FAMILY [OF IDENTIFIER]
+field_definition ::= element_ref ':' ( family_type | property_type | const_type | parent_entity )
+family_type ::= FAMILY [OF element_ref]
+element_ref ::= IDENTIFIER
 property_type ::= EXTERNAL? PROPERTY
  ( collection_type
  | class_ref
