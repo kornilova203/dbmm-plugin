@@ -1,6 +1,6 @@
 <idea-plugin>
     <name>Dbmm Support</name>
-    <version>2.0</version>
+    <version>3.0</version>
 
     <vendor url="https://github.com/kornilova-l" email="liudmila.kornilova@jetbrains.com" />
 
@@ -20,6 +20,7 @@
                                  implementationClass="com.github.korniloval.dbmm.psi.DbmmElementManipulator"/>
         <lang.findUsagesProvider language="Dbmm"
                                  implementationClass="com.github.korniloval.dbmm.DbmmFindUsagesProvider"/>
+        <lang.psiStructureViewFactory language="Dbmm" implementationClass="com.github.korniloval.dbmm.structure.view.DbmmStructureViewBuilderFactory"/>
     </extensions>
 
 </idea-plugin>

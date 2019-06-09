@@ -3,6 +3,7 @@ package com.github.korniloval.dbmm.psi
 import com.github.korniloval.dbmm.DbmmFileType
 import com.github.korniloval.dbmm.DbmmLanguage
 import com.intellij.extapi.psi.PsiFileBase
+import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
@@ -13,7 +14,7 @@ import com.intellij.psi.util.PsiTreeUtil
 /**
  * @author Liudmila Kornilova
  **/
-class DbmmFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, DbmmLanguage.INSTANCE) {
+class DbmmFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, DbmmLanguage.INSTANCE), DbmmElement {
     override fun getFileType(): FileType = DbmmFileType.INSTANCE
 
     override fun toString(): String = "dbmm File"
@@ -26,4 +27,5 @@ class DbmmFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, DbmmL
         return false
     }
 
+    override fun getPresentation(): ItemPresentation = getPresentation(this)
 }
