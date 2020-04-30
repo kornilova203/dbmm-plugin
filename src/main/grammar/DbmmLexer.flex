@@ -51,7 +51,7 @@ IDENTIFIER=[_a-zA-Z0-9]+
   "abstract"         { return ABSTRACT; }
   "parent"           { return PARENT; }
   "entity"           { return ENTITY; }
-  "external"         { return EXTERNAL; }
+  "internal"         { return INTERNAL; }
   "const"            { yybegin(LOOKING_FOR_JAVA_CODE_STATE); return CONST; }
   "default"          { yybegin(LOOKING_FOR_JAVA_CODE_STATE); return DEFAULT; }
   ":"                { return COLON; }
