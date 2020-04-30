@@ -37,7 +37,7 @@ private not_identifier_or_comma ::= !( ',' | IDENTIFIER )
 field_definition ::= element_ref ':' ( family_type | property_type | const_type | parent_entity )
 family_type ::= FAMILY [OF element_ref]
 element_ref ::= IDENTIFIER
-property_type ::= EXTERNAL? PROPERTY
+property_type ::= INTERNAL? PROPERTY
  ( collection_type
  | class_ref
  )
